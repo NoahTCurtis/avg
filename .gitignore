@@ -1,0 +1,22 @@
+# file types
+*~
+*.swp
+*.db
+*.VC.db
+*.opendb
+*.tlog
+*.lastbuildstate
+*.ipch
+*.tlog
+*.idb
+*.suo
+
+# directories
+docs/
+examples/
+vis/Release/
+vis/Debug/
+vis/x64/
+vis/.vs/
+**/Debug/
+**/x64/
