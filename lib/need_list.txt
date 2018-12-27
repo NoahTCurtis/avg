@@ -1,0 +1,5 @@
+assimp.dll
+assimp.lib
+glfw3.dll
+glfw3.lib
+glfw3dll.lib
