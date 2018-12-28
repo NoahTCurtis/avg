@@ -4,5 +4,6 @@
 
 int main(void)
 {
-	new Application();
+	Application app;
+	while(app.Loop());
 }
