@@ -8,6 +8,7 @@ public:
 	unsigned CreateMember(unsigned key = -1);
 	T& operator[](unsigned key);
 	void DestroyMember(unsigned key);
+	const std::map<unsigned, T*>& GetMemberMap();
 
 private:
 	unsigned getUnusedKey();
@@ -37,6 +38,12 @@ void Manager<T>::DestroyMember(unsigned key)
 {
 	delete members[key];
 	members.erase(key);
+}
+
+template<typename T>
+const std::map<unsigned, T*>& Manager<T>::GetMemberMap()
+{
+	return members;
 }
 
 template<typename T>

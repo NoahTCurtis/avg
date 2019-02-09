@@ -4,6 +4,7 @@
 
 int main(void)
 {
-	Application app;
-	while(app.Loop());
+	app = new Application();
+	while(app->Loop());
+	delete app;
 }

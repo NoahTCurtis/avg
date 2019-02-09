@@ -16,11 +16,10 @@ public:
 	~Window();
 
 	GLFWwindow* getGLFWwindow() { return window_; }
+	void MakeContextCurrent();
 
 	void change_title(std::string title);
-
 	void set_size(int width, int height);
-
 	glm::vec2 get_size();
 	glm::mat4 compute_perspective_matrix(float znear, float zfar);
 

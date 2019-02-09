@@ -1,27 +1,27 @@
 /******************************************************
 *******************HOW TO USE INPUT********************
 *******************************************************
-* 1> Inlcude this header															*
-*																										 *
-* 2> Do the following:																*
-*																										 *
-*	 if( Input::IsTriggered( KEYS::SPACE ) )					 *
-*	 {																								 *
-*		 //Your code goes here!													*
-*	 }																								 *
-*																										 *
-* 3> Other functions are available:									 *
-*			int Input::IsTriggered (int keycode);					*
-*			int Input::IsDown			(int keycode);					*
-*			int Input::IsReleased	(int keycode);					*
-*			int Input::IsUp				(int keycode);					*
-*																										 *
-* 3.5> All of these functions act as booleans, so		 *
-*			use them accordingly. It's a lot like Zilch.	 *
-*																										 *
-* 4> The list of keys below is the list of usable		 *
-*		keys. Please use the enum-ed ones, not the			 *
-*		GLFW_KEY_X ones.																 *
+* 1> Inlcude this header                              *
+*                                                     *
+* 2> Do the following:                                *
+*                                                     *
+*   if( Input::IsTriggered( KEYS::SPACE ) )           *
+*   {                                                 *
+*     //Your code goes here!                          *
+*   }                                                 *
+*                                                     *
+* 3> Other functions are available:                   *
+*      int Input::IsTriggered (int keycode);          *
+*      int Input::IsDown      (int keycode);          *
+*      int Input::IsReleased  (int keycode);          *
+*      int Input::IsUp        (int keycode);          *
+*                                                     *
+* 3.5> All of these functions act as booleans, so     *
+*      use them accordingly. It's a lot like Zilch.   *
+*                                                     *
+* 4> The list of keys below is the list of usable     *
+*    keys. Please use the enum-ed ones, not the       *
+*    GLFW_KEY_X ones.                                 *
 ******************************************************/
 #pragma once
 #ifndef INPUT_H
@@ -49,7 +49,7 @@ namespace Mouse
 	enum Mouse
 	{
 		/* Mouse Keys */
-			Left = 0
+		    Left = 0
 		, Right = 1
 		, Middle = 2
 	}; // end of enum

@@ -1,4 +1,6 @@
 #include <iostream>
+#include <string>
+#include <cassert>
 
 #include "glad/glad.h"
 #include "GLFW/glfw3.h"
@@ -8,7 +10,9 @@
 
 #include "application.h"
 #include "input.h"
+#include "mesh.h"
 
+Application* app = nullptr;
 
 void debug_callback(GLenum source,
 	GLenum type,
@@ -20,7 +24,6 @@ void debug_callback(GLenum source,
 
 Application::Application()
 {
-
 	//Create Managers
 	Input = new InputManager;
 	Input->Initialize();
@@ -44,7 +47,14 @@ Application::Application()
 	//TODO: FIX THE DEBUG CALLBACK FOR CHRISTS SAKE
 	///glDebugMessageCallback(debug_callback, nullptr); 
 
+	//register window's glfw and imgui callbacks
 	Windows[0].Register();
+
+	//create a default renderer and camera
+	Cameras.CreateMember(0);
+	Renders.CreateMember(0);
+	Renders[0].windowIndex = 0; //this renderer is tied to the main window
+	Renders[0].cameraIndex = 0; //this renderer uses the main camera
 
 	// Setup Dear ImGui binding
 	IMGUI_CHECKVERSION();
@@ -53,6 +63,13 @@ Application::Application()
 	ImGui_ImplGlfw_InitForOpenGL(Windows[0].getGLFWwindow(), false); //only the main window will have imgui
 	ImGui_ImplOpenGL3_Init("#version 330");
 	ImGui::StyleColorsDark(); //already the default
+
+	//(TEMP) SLAP IN A QUICK MESH (TEMP)
+	Meshes[Meshes.CreateMember()].create_default_mesh();
+	//(TEMP) Slap in a quick shader (TEMP)
+	unsigned shaderName = Shaders.CreateMember(0);
+	Shaders[shaderName].Deserialize("mesh_vert.shader", "mesh_frag.shader");
+	Shaders[shaderName].BuildAttach();
 }
 
 bool Application::Loop()
@@ -69,38 +86,24 @@ bool Application::Loop()
 
 	//update systems
 	Input->Update(0);
-	glClearColor(clearColor.x, clearColor.y, clearColor.z, 1.0f);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	//finish and flush commands
-	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-	glfwSwapBuffers(Windows[0].getGLFWwindow());
+	//render
+	Renders[0].Render();
 
-	if (Input->IsTriggered(Keys::W))
-	{
-		unsigned key = Windows.CreateMember();
-		std::string name = std::string("window ") + std::to_string(key);
-		Windows[key].Initialize(600, 800, name.c_str());
-		Windows[key].Register();
-	}
-
-	
+	//decide whether the app should quit
 	return !Input->IsTriggered(Keys::Escape) && !glfwWindowShouldClose(Windows[0].getGLFWwindow());
 }
 
 Application::~Application()
 {
-	/*
 	// Cleanup imgui
 	ImGui_ImplOpenGL3_Shutdown();
 	ImGui_ImplGlfw_Shutdown();
 	ImGui::DestroyContext();
 
 	//Exit safely
-	delete mainWindow;
+	///delete mainWindow;
 	glfwTerminate();
-	return 0;
-	//*/
 }
 
 

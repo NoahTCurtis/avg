@@ -41,6 +41,11 @@ Window::~Window()
 }
 
 
+void Window::MakeContextCurrent()
+{
+	glfwMakeContextCurrent(window_);
+}
+
 void Window::change_title(std::string title)
 {
 	glfwSetWindowTitle(window_, title.c_str());
