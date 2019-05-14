@@ -18,6 +18,9 @@ void Renderer::Render()
 	glClearColor(clearColor.x, clearColor.y, clearColor.z, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+	//(TEMP) bind default shader
+	app->Shaders[0].Bind();
+
 	//render goes here
 	auto meshes = app->Meshes.GetMemberMap();
 	for (auto& pair : meshes)

@@ -18,7 +18,7 @@ public:
 	GLFWwindow* getGLFWwindow() { return window_; }
 	void MakeContextCurrent();
 
-	void change_title(std::string title);
+	void set_title(std::string title);
 	void set_size(int width, int height);
 	glm::vec2 get_size();
 	glm::mat4 compute_perspective_matrix(float znear, float zfar);
@@ -31,6 +31,9 @@ private:
 	glm::mat4 perspective_;
 };
 
-void WindowSizeCallback(GLFWwindow* window, int width, int height);
 
+//GLFW callbacks.
+//Naming convention is just strip off leading "GLFW"
+//char/key/input callbacks should remember to passthrough to imgui
+void WindowSizeCallback(GLFWwindow* window, int width, int height);
 void FramebufferSizeCallback(GLFWwindow* window, int width, int height);

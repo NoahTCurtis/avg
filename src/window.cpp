@@ -23,7 +23,10 @@ void Window::Initialize(int vertical, int horizontal, const char* title)
 	lookupTable_[window_] = this;
 
 	glfwMakeContextCurrent(window_);
-	////glViewport(0, 0, horizontal, vertical); //this got moved
+	
+	//set callbacks for this window
+	glfwSetFramebufferSizeCallback(window_, FramebufferSizeCallback);
+	glfwSetWindowSizeCallback(window_, WindowSizeCallback);
 }
 
 
@@ -46,7 +49,7 @@ void Window::MakeContextCurrent()
 	glfwMakeContextCurrent(window_);
 }
 
-void Window::change_title(std::string title)
+void Window::set_title(std::string title)
 {
 	glfwSetWindowTitle(window_, title.c_str());
 }
@@ -54,6 +57,7 @@ void Window::change_title(std::string title)
 
 void Window::set_size(int width, int height)
 {
+	MakeContextCurrent();
 	glfwSetWindowSize(window_, width, height);
 	glViewport(0, 0, width, height);
 }
@@ -84,7 +88,7 @@ Window * Window::LookupWindowByGLFWwindow(GLFWwindow * gw)
 
 void WindowSizeCallback(GLFWwindow* window, int width, int height)
 {
-	glViewport(0, 0, width, height);
+	Window::LookupWindowByGLFWwindow(window)->set_size(width, height);
 }
 
 

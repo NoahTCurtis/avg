@@ -3,6 +3,7 @@
 #include <iostream>
 #include <fstream>
 #include <cassert>
+#include <ctime>
 
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
@@ -54,12 +55,12 @@ void Mesh::create_default_mesh()
 		vertices.push_back(default_vertices[i]);
 	for (int i = 0; i < 6; i++)
 		indices.push_back(default_indices[i]);
+	randomize_vertex_colors(vertices);
 	create_VAO_from_raw_data(vertices, indices);
 }
 
 
-void Mesh::create_VAO_from_raw_data(std::vector<VertexForMesh>& vertices,
-									std::vector<unsigned>& indices)
+void Mesh::create_VAO_from_raw_data(std::vector<VertexForMesh>& vertices, std::vector<unsigned>& indices)
 {
 	assert(VAO_name == -1);
 
@@ -100,6 +101,7 @@ void Mesh::bind()
 
 void Mesh::randomize_vertex_colors(std::vector<VertexForMesh>& verts)
 {
-	///for (auto& vert : verts)
-	///    vert.color = glm::vec3(randFloat01(), randFloat01(), randFloat01());
+	auto randFloat01 = []() { return static_cast<float>(rand()) / static_cast<float>(RAND_MAX); };
+	for (auto& vert : verts)
+	    vert.color = glm::vec3(randFloat01(), randFloat01(), randFloat01());
 }

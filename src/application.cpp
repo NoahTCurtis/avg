@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <cassert>
+#include <ctime>
 
 #include "glad/glad.h"
 #include "GLFW/glfw3.h"
@@ -14,16 +15,11 @@
 
 Application* app = nullptr;
 
-void debug_callback(GLenum source,
-	GLenum type,
-	GLuint id,
-	GLenum severity,
-	GLsizei length,
-	const GLchar *message,
-	const void *userParam);
-
 Application::Application()
 {
+	//Initialize RNG
+	srand( static_cast<int>( time(0) ) );
+
 	//Create Managers
 	Input = new InputManager;
 	Input->Initialize();
@@ -45,7 +41,7 @@ Application::Application()
 	glEnable(GL_DEPTH_TEST); //this should maybe be somewhere else?
 
 	//TODO: FIX THE DEBUG CALLBACK FOR CHRISTS SAKE
-	///glDebugMessageCallback(debug_callback, nullptr); 
+	glDebugMessageCallback(debug_callback, nullptr); 
 
 	//register window's glfw and imgui callbacks
 	Windows[0].Register();
@@ -67,9 +63,9 @@ Application::Application()
 	//(TEMP) SLAP IN A QUICK MESH (TEMP)
 	Meshes[Meshes.CreateMember()].create_default_mesh();
 	//(TEMP) Slap in a quick shader (TEMP)
-	unsigned shaderName = Shaders.CreateMember(0);
-	Shaders[shaderName].Deserialize("mesh_vert.shader", "mesh_frag.shader");
-	Shaders[shaderName].BuildAttach();
+	unsigned shaderID = Shaders.CreateMember(0);
+	Shaders[shaderID].Deserialize("mesh_vert.shader", "mesh_frag.shader");
+	Shaders[shaderID].BuildAttach();
 }
 
 bool Application::Loop()
@@ -84,13 +80,26 @@ bool Application::Loop()
 		ImGui::End();
 	ImGui::Render();
 
+	//Compute dt
+	auto now = std::chrono::high_resolution_clock::now();
+	std::chrono::duration<double> delta = now - then_;
+	dt = (float)delta.count();
+	time_elapsed += dt;
+	then_ = now;
+
 	//update systems
 	Input->Update(0);
 
 	//render
 	Renders[0].Render();
 
-	//decide whether the app should quit
+	//(TEMP) do something really stupid
+	int w = 800 + static_cast<int>(static_cast<float>(glm::sin(time_elapsed) * 400.0));
+	int h = 600 + static_cast<int>(static_cast<float>(glm::cos(time_elapsed) * 300.0));
+	///Windows[0].set_size(w, h);
+	Windows[0].set_title(std::string("Another Voxel Game (") + std::to_string(1.0f/dt) + ")");
+
+	//return whether the app should continue
 	return !Input->IsTriggered(Keys::Escape) && !glfwWindowShouldClose(Windows[0].getGLFWwindow());
 }
 
@@ -116,6 +125,6 @@ void debug_callback(GLenum source,
 	const GLchar *message,
 	const void *userParam)
 {
-	std::cout << "Error: OpenGL reported an error from " << source << ". Type: " << type << " ID: " << id << " Severity: " << severity << std::endl;
+	std::cout << "Error: OpenGL reported an error from " << source << ". Type: " << type << " ID: " << id << " Severity: " << severity << '\n';
 	std::cout << message << std::endl;
 }

@@ -1,8 +1,10 @@
-#include "file.h"
-
 #include <direct.h>
 #include <fstream>
-#include <string>
+#include <cassert>
+#include <iostream>
+#include <filesystem>
+
+#include "file.h"
 
 std::string get_current_working_directory(void)
 {
@@ -27,15 +29,24 @@ std::string strip_slashes(std::string str)
 
 std::string get_full_file_path(std::string filename, std::string directory)
 {
+	/*
 	std::string fullpath
 		= std::string("\\..\\")
 		+ strip_slashes(directory)
 		+ '\\'
 		+ strip_slashes(filename);
 	return fullpath;
+	*/
+
+	///std::filesystem::path p;
+
 }
 
 std::string get_file_text(std::string filename, std::string directory)
 {
-
+	//FUNCTION NOT WORKING: RETURNING EMPTY STRINGS
+	std::ifstream t(get_full_file_path(filename, directory));
+	assert(t.good());
+	return std::string((std::istreambuf_iterator<char>(t)),
+		std::istreambuf_iterator<char>());
 }
